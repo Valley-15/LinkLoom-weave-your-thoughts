@@ -32,22 +32,12 @@ I built LinkLoom because I was tired of losing track of great links. With LinkLo
 
 ---
 
-## 🖥️ Screenshots
-
-Below are some screenshots of LinkLoom in action. See the `/screenshots` folder in this repo for more views and details!
-
-| Empty State | With Bookmarks |
-| ----------- | ------------- |
-| ![Empty](screenshots/empty.png) | ![Filled](screenshots/filled.png) |
-
----
-
 ## 📝 Setup & Local Development
 
 1. **Clone the repo:**
    ```sh
-   git clone https://github.com/yourusername/linkloom.git
-   cd linkloom
+   git clone https://github.com/<your-username>/LinkLoom-weave-your-thoughts.git
+   cd LinkLoom-weave-your-thoughts
    ```
 2. **Install dependencies:**
    ```sh
@@ -70,7 +60,7 @@ Below are some screenshots of LinkLoom in action. See the `/screenshots` folder 
 
 ## 🌐 Live Demo
 
-[https://linkloom.vercel.app](https://linkloom.vercel.app)
+[https://link-loom-weave-your-thoughts.vercel.app](https://link-loom-weave-your-thoughts.vercel.app)
 
 ---
 

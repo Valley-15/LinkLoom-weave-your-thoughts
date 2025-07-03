@@ -310,41 +310,20 @@ export default function BookmarkListWithTagFilter({
       {/* Bookmarks list */}
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.length === 0 ? (
-          <li className="col-span-full flex flex-col items-center justify-center text-center text-gray-400 py-16 text-lg font-medium bg-[var(--panel)] rounded shadow-inner min-h-[260px]">
-            <svg
-              width="64"
-              height="64"
-              fill="none"
-              viewBox="0 0 64 64"
-              className="mb-4 opacity-60"
-            >
-              <rect
-                x="12"
-                y="16"
-                width="40"
-                height="32"
-                rx="6"
-                fill="#23272e"
-                stroke="#3b3b3b"
-                strokeWidth="2"
-              />
-              <path
-                d="M20 24h24M20 32h16M20 40h8"
-                stroke="#555"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-            <h2 className="text-xl font-bold text-white mb-1">
-              No bookmarks yet!
-            </h2>
-            <p className="text-gray-400 mb-4">
-              Looks like you haven’t saved anything. Hit ‘+ New Bookmark’ to get
-              started.
-            </p>
+          <li className="col-span-full flex flex-col items-center justify-center text-center py-16 px-6 bg-[#23272e] rounded-2xl shadow-xl border border-gray-800 max-w-xl mx-auto min-h-[260px] mt-10">
+            <div className="mb-6 flex flex-col items-center">
+              {/* Outlined bookmark icon */}
+              <svg width="40" height="40" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" className="mb-4 text-gray-400" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16l-7-4-7 4V4z" />
+              </svg>
+              <h2 className="text-2xl font-bold text-white mb-2">No bookmarks yet!</h2>
+              <p className="text-gray-300 text-base max-w-md mb-6">
+                Looks like you haven’t saved anything. Hit ‘+ New Bookmark’ to get started.
+              </p>
+            </div>
             <a
               href="/bookmarks/new"
-              className="bg-green-700 hover:bg-green-800 text-white font-semibold px-5 py-2 rounded-lg shadow transition-colors text-base flex items-center gap-2"
+              className="bg-green-700 hover:bg-green-800 text-white font-bold px-7 py-3 rounded-xl shadow-lg text-base flex items-center gap-2 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-green-400"
             >
               <span className="text-xl">+</span> Add your first bookmark
             </a>
