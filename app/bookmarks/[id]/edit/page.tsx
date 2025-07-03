@@ -3,15 +3,11 @@ import EditBookmarkForm from "@/components/EditBookmarkForm";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
-interface PageProps {
-  params: { id: string };
-}
-
 export const metadata: Metadata = {
   title: "Edit Bookmark | LinkLoom",
 };
 
-export default async function EditBookmarkPage({ params }: PageProps) {
+export default async function EditBookmarkPage({ params }: { params: { id: string } }) {
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) {
