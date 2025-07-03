@@ -7,7 +7,8 @@ export const metadata: Metadata = {
   title: "Edit Bookmark | LinkLoom",
 };
 
-export default async function EditBookmarkPage({ params }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default async function EditBookmarkPage({ params }: any) {
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) {
