@@ -2,7 +2,6 @@ import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import React from "react";
 import Logout from "./Logout";
-import { usePathname } from "next/navigation";
 
 const Navbar = async () => {
   const supabase = await createClient();
