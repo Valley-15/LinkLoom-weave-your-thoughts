@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { deleteBookmark } from "@/actions/bookmarks";
 import { useRouter, useSearchParams } from "next/navigation";
+import { getRelativeTime } from "@/utils/relativeTime";
 
 interface Tag {
   id: string;
@@ -18,7 +19,8 @@ interface Bookmark {
   title: string;
   url: string;
   description?: string;
-  created_at_formatted: string;
+  created_at: string;
+  created_at_formatted?: string;
   bookmark_tags: BookmarkTag[];
 }
 
@@ -84,9 +86,15 @@ export default function BookmarkListWithTagFilter({
   const [searchValue, setSearchValue] = useState(searchTerm);
 
   // Show top 10 tags, rest in popover
+  // Only show tags that have at least one bookmark associated
+  const tagsWithBookmarks = tags.filter((tag) =>
+    bookmarks.some((bm) =>
+      (bm.bookmark_tags || []).some((bt) => bt.tag && bt.tag.id === tag.id)
+    )
+  );
   const TOP_TAGS = 10;
-  const topTags = tags.slice(0, TOP_TAGS);
-  const extraTags = tags.slice(TOP_TAGS);
+  const topTags = tagsWithBookmarks.slice(0, TOP_TAGS);
+  const extraTags = tagsWithBookmarks.slice(TOP_TAGS);
   const filteredExtraTags = extraTags.filter((tag) =>
     tag.name.toLowerCase().includes(tagSearch.toLowerCase())
   );
@@ -302,7 +310,7 @@ export default function BookmarkListWithTagFilter({
       {/* Bookmarks list */}
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.length === 0 ? (
-          <li className="col-span-full flex flex-col items-center justify-center text-center text-gray-400 py-16 text-lg font-medium bg-[var(--panel)] rounded shadow-inner min-h-[220px]">
+          <li className="col-span-full flex flex-col items-center justify-center text-center text-gray-400 py-16 text-lg font-medium bg-[var(--panel)] rounded shadow-inner min-h-[260px]">
             <svg
               width="64"
               height="64"
@@ -327,7 +335,19 @@ export default function BookmarkListWithTagFilter({
                 strokeLinecap="round"
               />
             </svg>
-            No bookmarks found—add a new one!
+            <h2 className="text-xl font-bold text-white mb-1">
+              No bookmarks yet!
+            </h2>
+            <p className="text-gray-400 mb-4">
+              Looks like you haven’t saved anything. Hit ‘+ New Bookmark’ to get
+              started.
+            </p>
+            <a
+              href="/bookmarks/new"
+              className="bg-green-700 hover:bg-green-800 text-white font-semibold px-5 py-2 rounded-lg shadow transition-colors text-base flex items-center gap-2"
+            >
+              <span className="text-xl">+</span> Add your first bookmark
+            </a>
           </li>
         ) : (
           filtered.map((bm: Bookmark) => (
@@ -346,42 +366,81 @@ export default function BookmarkListWithTagFilter({
                   className="w-6 h-6 rounded mr-2 flex-shrink-0 bg-[#18181b] border border-gray-700"
                   loading="lazy"
                 />
-                <button
-                  onClick={() => handleDelete(bm.id)}
-                  disabled={deletingId === bm.id}
-                  className={`w-8 h-8 flex items-center justify-center rounded-full border border-transparent transition-all duration-150
-                    bg-transparent
-                    hover:bg-red-900
-                    focus:outline focus:outline-2 focus:outline-red-500
-                    active:scale-95
-                    shadow-sm
-                    disabled:opacity-50 disabled:cursor-not-allowed
-                    ${deletingId === bm.id ? "animate-pulse" : ""}
-                    group-hover:opacity-100 opacity-0
-                  `}
-                  aria-label="Delete bookmark"
-                  title="Delete bookmark"
-                  tabIndex={0}
-                  style={{ position: "absolute", top: 12, right: 12 }}
-                >
-                  {/* Trash icon SVG */}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className={`w-5 h-5 ${
-                      deletingId === bm.id ? "text-red-400" : "text-red-500"
-                    }`}
-                    aria-hidden="true"
+                <div className="flex gap-1 items-center">
+                  {/* Edit button */}
+                  <a
+                    href={`/bookmarks/${bm.id}/edit`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-full border border-transparent transition-all duration-150
+                      bg-transparent
+                      hover:bg-blue-900
+                      focus:outline focus:outline-2 focus:outline-blue-500
+                      active:scale-95
+                      shadow-sm
+                      group-hover:opacity-100 opacity-0
+                      sm:opacity-0 sm:group-hover:opacity-100
+                      md:opacity-0 md:group-hover:opacity-100
+                      lg:opacity-0 lg:group-hover:opacity-100
+                      [@media(max-width:640px)]:opacity-100
+                    `}
+                    aria-label="Edit bookmark"
+                    title="Edit bookmark"
+                    tabIndex={0}
+                    style={{ position: "absolute", top: 12, right: 52 }}
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M7.5 3A1.5 1.5 0 0 1 9 1.5h2A1.5 1.5 0 0 1 12.5 3H17a1 1 0 1 1 0 2h-1.07l-.86 11.18A2 2 0 0 1 13.08 18H6.92a2 2 0 0 1-1.99-1.82L4.07 5H3a1 1 0 1 1 0-2h4.5zm2.5 0V2h-2v1h2zm-4.43 2l.85 11h6.16l.85-11H5.57z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="sr-only">Delete</span>
-                </button>
+                    {/* Pencil icon SVG */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      className="w-5 h-5 text-blue-400"
+                      aria-hidden="true"
+                    >
+                      <path d="M17.414 2.586a2 2 0 0 0-2.828 0l-9.5 9.5A2 2 0 0 0 4 13.414V16a2 2 0 0 0 2 2h2.586a2 2 0 0 0 1.414-.586l9.5-9.5a2 2 0 0 0 0-2.828l-2-2zM6 15v-1.586l8.293-8.293 1.586 1.586L7.586 15H6zm2.586 1H6a1 1 0 0 1-1-1v-2.586l8.293-8.293 2.586 2.586-8.293 8.293z" />
+                    </svg>
+                    <span className="sr-only">Edit</span>
+                  </a>
+                  {/* Delete button */}
+                  <button
+                    onClick={() => handleDelete(bm.id)}
+                    disabled={deletingId === bm.id}
+                    className={`w-8 h-8 flex items-center justify-center rounded-full border border-transparent transition-all duration-150
+                      bg-transparent
+                      hover:bg-red-900
+                      focus:outline focus:outline-2 focus:outline-red-500
+                      active:scale-95
+                      shadow-sm
+                      disabled:opacity-50 disabled:cursor-not-allowed
+                      ${deletingId === bm.id ? "animate-pulse" : ""}
+                      group-hover:opacity-100 opacity-0
+                      sm:opacity-0 sm:group-hover:opacity-100
+                      md:opacity-0 md:group-hover:opacity-100
+                      lg:opacity-0 lg:group-hover:opacity-100
+                      [@media(max-width:640px)]:opacity-100
+                    `}
+                    aria-label="Delete bookmark"
+                    title="Delete bookmark"
+                    tabIndex={0}
+                    style={{ position: "absolute", top: 12, right: 12 }}
+                  >
+                    {/* Trash icon SVG */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      className={`w-5 h-5 ${
+                        deletingId === bm.id ? "text-red-400" : "text-red-500"
+                      }`}
+                      aria-hidden="true"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M7.5 3A1.5 1.5 0 0 1 9 1.5h2A1.5 1.5 0 0 1 12.5 3H17a1 1 0 1 1 0 2h-1.07l-.86 11.18A2 2 0 0 1 13.08 18H6.92a2 2 0 0 1-1.99-1.82L4.07 5H3a1 1 0 1 1 0-2h4.5zm2.5 0V2h-2v1h2zm-4.43 2l.85 11h6.16l.85-11H5.57z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="sr-only">Delete</span>
+                  </button>
+                </div>
               </div>
               {/* Card content clickable */}
               <a
@@ -425,21 +484,32 @@ export default function BookmarkListWithTagFilter({
                   </span>
                 )}
               </div>
-              <div className="mt-auto pt-2">
+              <div className="mt-auto pt-2 flex items-center gap-4 text-xs text-gray-400">
+                {/* Clock icon and relative time with tooltip */}
                 {(() => {
-                  const { dateStr, timeStr, iso } = formatDateTime(
-                    bm.created_at
-                  );
+                  const { dateStr, timeStr } = formatDateTime(bm.created_at);
+                  const rel = getRelativeTime(bm.created_at);
                   return (
-                    <p className="text-xs text-gray-500 italic">
-                      Added: {dateStr}{" "}
-                      <span className="ml-1">at {timeStr}</span>
-                      <time className="sr-only" dateTime={iso}>
-                        {iso}
-                      </time>
-                    </p>
+                    <span className="flex items-center gap-1 group relative">
+                      <svg className="w-4 h-4 text-gray-500 mr-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6l4 2" />
+                      </svg>
+                      <span className="cursor-default group-hover:underline" tabIndex={0} title={`${dateStr} at ${timeStr}`}>Added {rel}</span>
+                      {/* Tooltip on hover/focus */}
+                      <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:flex group-focus:flex bg-gray-900 text-gray-100 px-3 py-1 rounded shadow text-xs z-20 whitespace-nowrap border border-gray-700">
+                        {dateStr} at {timeStr}
+                      </span>
+                    </span>
                   );
                 })()}
+                {/* Tag count */}
+                <span className="flex items-center gap-1">
+                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 7a1 1 0 011-1h4.586a1 1 0 01.707.293l5.414 5.414a2 2 0 010 2.828l-7.586 7.586a2 2 0 01-2.828 0l-5.414-5.414a1 1 0 010-1.414l7.586-7.586A1 1 0 0111.586 5H13a1 1 0 011 1v1" />
+                  </svg>
+                  {bm.bookmark_tags?.length || 0} tags
+                </span>
               </div>
             </li>
           ))
