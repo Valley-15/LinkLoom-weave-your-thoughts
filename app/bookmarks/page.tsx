@@ -2,7 +2,8 @@ import { createClient } from "@/utils/supabase/server";
 import BookmarksListWithState from "@/components/BookmarksListWithState";
 import Link from "next/link";
 
-export default async function BookmarksPage({ searchParams }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default async function BookmarksPage({ searchParams }: any) {
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) {
