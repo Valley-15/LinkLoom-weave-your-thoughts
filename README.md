@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LinkLoom
 
-## Getting Started
+Welcome to LinkLoom—a simple, fast, and beautiful way to save and organize your bookmarks. Built for people who want a clean, dark-mode experience and powerful tagging, without the clutter.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Why LinkLoom?
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+I built LinkLoom because I was tired of losing track of great links. With LinkLoom, you can quickly save, tag, and find your bookmarks from any device. It’s private, fast, and focused on what matters: your links.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## What’s Inside?
 
-## Learn More
+- **Next.js 15** (App Router, Server Actions, Client Components)
+- **Supabase** (Postgres, Auth, RLS)
+- **Tailwind CSS** (fully dark, responsive)
+- **TypeScript** (strict, safe)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ✨ Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Email/password & GitHub OAuth authentication
+- Add, edit, and delete bookmarks
+- Tag bookmarks (with chips, filtering)
+- Search and filter your collection instantly
+- Responsive dashboard—works great on mobile and desktop
+- Undo accidental deletes (snackbar)
+- Loading skeletons, empty states, and error banners
+- SEO, favicon, and social sharing cards
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🖥️ Screenshots
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Below are some screenshots of LinkLoom in action. See the `/screenshots` folder in this repo for more views and details!
+
+| Empty State | With Bookmarks |
+| ----------- | ------------- |
+| ![Empty](screenshots/empty.png) | ![Filled](screenshots/filled.png) |
+
+---
+
+## 📝 Setup & Local Development
+
+1. **Clone the repo:**
+   ```sh
+   git clone https://github.com/yourusername/linkloom.git
+   cd linkloom
+   ```
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+3. **Configure Supabase:**
+   - Create a Supabase project
+   - Copy your `SUPABASE_URL` and `SUPABASE_ANON_KEY` to a `.env.local` file:
+     ```env
+     NEXT_PUBLIC_SUPABASE_URL=your-url
+     NEXT_PUBLIC_SUPABASE_ANON_KEY=your-key
+     ```
+   - Run the SQL in `supabase/schema.sql` to set up tables and RLS
+4. **Run locally:**
+   ```sh
+   npm run dev
+   ```
+
+---
+
+## 🌐 Live Demo
+
+[https://linkloom.vercel.app](https://linkloom.vercel.app)
+
+---
+
+## 🤝 Contributing
+
+Found a bug or have an idea? Open an issue or PR—let’s make LinkLoom better together.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).
+
+---
+
+> From shadows, with obsession.

@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
-import { userAgent } from "next/server";
 
 export async function getUserSession() {
   const supabase = await createClient();
@@ -117,8 +116,7 @@ export async function signInWithGithub() {
   });
 
   if (error) {
-    // Log the error for debugging
-    console.error("GitHub OAuth error:", error);
+    // TODO: handle GitHub OAuth error (was: console.error)
     redirect("/error");
   } else if (data.url) {
     return redirect(data.url);

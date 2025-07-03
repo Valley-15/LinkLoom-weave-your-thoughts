@@ -152,7 +152,14 @@ export default function NewBookmarkForm() {
                 {descCount}/300
               </span>
             </div>
-            <TagInput name="tags" />
+            <div className="mt-4">
+              <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200">
+                Tags
+              </label>
+              <div className="w-full">
+                <TagInput name="tags" />
+              </div>
+            </div>
           </>
         )}
       </div>

@@ -22,7 +22,7 @@ export async function GET(request: Request) {
       // Correct usage: getUser() uses the session from cookies
       const { data, error: useError } = await supabase.auth.getUser();
       if (useError) {
-        console.error("Error fetching user data:", useError.message);
+        // TODO: handle error fetching user data (was: console.error)
         return NextResponse.redirect(`${origin}/error`);
       }
 
@@ -45,7 +45,7 @@ export async function GET(request: Request) {
           username,
         });
         if (dbError) {
-          console.error("Error inserting user data", dbError.message);
+          // TODO: handle error inserting user data (was: console.error)
           return NextResponse.redirect(`${origin}/error`);
         }
       }
@@ -61,10 +61,7 @@ export async function GET(request: Request) {
         return NextResponse.redirect(`${origin}${next}`);
       }
     } else {
-      console.error(
-        "Error exchanging code for session:",
-        exchangeError.message
-      );
+      // TODO: handle unknown error (was: console.error)
       return NextResponse.redirect(`${origin}/error`);
     }
   }
