@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Edit Bookmark | LinkLoom",
 };
 
-export default async function EditBookmarkPage({ params }: { params: { id: string } }) {
+export default async function EditBookmarkPage({ params }) {
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) {
