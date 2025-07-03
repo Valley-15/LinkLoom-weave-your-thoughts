@@ -13,7 +13,7 @@ export default function LoginPage() {
         <LoginGithub />
         <div className="flex flex-col gap-2 mt-2 text-center">
           <span className="text-gray-400 text-sm">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               className="font-bold text-blue-400 hover:underline"
               href="/register"
